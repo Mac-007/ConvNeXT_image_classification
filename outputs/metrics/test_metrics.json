@@ -1,0 +1,57 @@
+{
+    "epoch": 6,
+    "loss": 0.03728878815359848,
+    "accuracy": 0.9930313588850174,
+    "precision_macro": 0.9931972789115646,
+    "precision_micro": 0.9930313588850174,
+    "recall_macro": 0.9930313588850174,
+    "recall_micro": 0.9930313588850174,
+    "f1_macro": 0.9930303223475914,
+    "f1_micro": 0.9930313588850174,
+    "balanced_accuracy": 0.9930313588850174,
+    "roc_auc": 0.999943344381179,
+    "per_class_metrics": {
+        "bike": {
+            "precision": 1.0,
+            "recall": 0.975609756097561,
+            "f1-score": 0.9876543209876543,
+            "support": 41.0
+        },
+        "cars": {
+            "precision": 0.9761904761904762,
+            "recall": 1.0,
+            "f1-score": 0.9879518072289156,
+            "support": 41.0
+        },
+        "cats": {
+            "precision": 1.0,
+            "recall": 0.975609756097561,
+            "f1-score": 0.9876543209876543,
+            "support": 41.0
+        },
+        "dogs": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 41.0
+        },
+        "flowers": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 41.0
+        },
+        "horses": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 41.0
+        },
+        "human": {
+            "precision": 0.9761904761904762,
+            "recall": 1.0,
+            "f1-score": 0.9879518072289156,
+            "support": 41.0
+        }
+    }
+}

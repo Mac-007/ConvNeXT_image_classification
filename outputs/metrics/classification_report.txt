@@ -1,0 +1,13 @@
+              precision    recall  f1-score   support
+
+        bike       1.00      0.98      0.99        41
+        cars       0.98      1.00      0.99        41
+        cats       1.00      0.98      0.99        41
+        dogs       1.00      1.00      1.00        41
+     flowers       1.00      1.00      1.00        41
+      horses       1.00      1.00      1.00        41
+       human       0.98      1.00      0.99        41
+
+    accuracy                           0.99       287
+   macro avg       0.99      0.99      0.99       287
+weighted avg       0.99      0.99      0.99       287
