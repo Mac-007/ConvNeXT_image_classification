@@ -23,6 +23,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from utils.logger import setup_logger
 from utils.metrics import MetricsCalculator
 from utils.plots import PlotGenerator
+from utils.output_manager import create_timestamped_output_dirs
 from datasets.dataset import create_dataloaders
 from models.model import create_model
 
@@ -53,8 +54,19 @@ def test(config_path: str, checkpoint_path: Optional[str] = None):
     # Load configuration
     config = load_config(config_path)
     
-    # Setup logger
-    log_dir = config['output_directories']['logs']
+    # Setup basic logger first to log directory creation
+    logger = setup_logger(
+        name="ConvNeXTTester",
+        log_dir=None,
+        log_level=config['logging']['log_level']
+    )
+    
+    # Create timestamped output directories
+    output_dirs = create_timestamped_output_dirs(base_output_dir=config['output_base_dir'])
+    logger.info(f"Created timestamped output directories in: {Path(config['output_base_dir']) / Path(output_dirs['logs']).parent.name}")
+    
+    # Setup logger with file output
+    log_dir = output_dirs['logs']
     logger = setup_logger(
         name="ConvNeXTTester",
         log_dir=log_dir,
@@ -73,10 +85,6 @@ def test(config_path: str, checkpoint_path: Optional[str] = None):
         device = device_config
     
     logger.info(f"Using device: {device}")
-    
-    # Create output directories
-    for dir_name in config['output_directories'].values():
-        Path(dir_name).mkdir(parents=True, exist_ok=True)
     
     # Create dataloaders
     logger.info("Creating test dataloader...")
@@ -268,7 +276,7 @@ def test(config_path: str, checkpoint_path: Optional[str] = None):
     
     # Generate plots
     logger.info("Generating plots...")
-    plot_generator = PlotGenerator(output_dir=config['output_directories']['metrics'])
+    plot_generator = PlotGenerator(output_dir=output_dirs['metrics'])
     
     plot_generator.plot_confusion_matrix(
         confusion_matrix=cm,
@@ -297,7 +305,7 @@ def test(config_path: str, checkpoint_path: Optional[str] = None):
         'per_class_metrics': per_class_metrics
     }
     
-    metrics_path = Path(config['output_directories']['metrics']) / 'test_metrics.json'
+    metrics_path = Path(output_dirs['metrics']) / 'test_metrics.json'
     with open(metrics_path, 'w') as f:
         json.dump(metrics_output, f, indent=4)
     
@@ -306,12 +314,12 @@ def test(config_path: str, checkpoint_path: Optional[str] = None):
     # Save metrics to CSV
     metrics_df = pd.DataFrame([metrics])
     metrics_df.to_csv(
-        Path(config['output_directories']['metrics']) / 'test_metrics.csv',
+        Path(output_dirs['metrics']) / 'test_metrics.csv',
         index=False
     )
     
     # Save classification report to text file
-    report_path = Path(config['output_directories']['metrics']) / 'classification_report.txt'
+    report_path = Path(output_dirs['metrics']) / 'classification_report.txt'
     with open(report_path, 'w') as f:
         f.write(classification_report)
     
@@ -329,7 +337,7 @@ def test(config_path: str, checkpoint_path: Optional[str] = None):
     for i, class_name in enumerate(class_names):
         predictions_df[f'prob_{class_name}'] = all_probabilities[:, i]
     
-    predictions_path = Path(config['output_directories']['predictions']) / 'test_predictions.csv'
+    predictions_path = Path(output_dirs['predictions']) / 'test_predictions.csv'
     predictions_df.to_csv(predictions_path, index=False)
     logger.info(f"Predictions saved to {predictions_path}")
     
